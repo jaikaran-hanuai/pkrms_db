@@ -212,29 +212,47 @@ function Form() {
       transition={{ duration: 0.4 }}
     >
       <h3 className="section-title">Details</h3>
-      <input
-        type="text"
-        placeholder="LG Name"
-        value={FormData[type].lgName}
-        onChange={(e) => handleInputChange(e, type, "lgName")}
-        className="input-field"
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={FormData[type].email}
-        onChange={(e) => handleInputChange(e, type, "email")}
-        className="input-field"
-      />
+      <div className="form-row">
+  {/* LG Name */}
+  <div className="input-group">
+    <label className="floating-label">LG Name</label>
+    <input
+      type="text"
+      placeholder="Enter LG Name"
+      value={FormData[type].lgName}
+      onChange={(e) => handleInputChange(e, type, "lgName")}
+      className="input-field enhanced"
+    />
+  </div>
 
+  {/* Email */}
+  <div className="input-group">
+    <label className="floating-label">Email</label>
+    <input
+      type="email"
+      placeholder="Enter Email"
+      value={FormData[type].email}
+      onChange={(e) => handleInputChange(e, type, "email")}
+      className="input-field enhanced"
+    />
+  </div>
+
+  {/* Phone Number */}
+  <div className="input-group">
+    <label className="floating-label">Phone Number</label>
+    <div className="phone-wrapper">
       <span className="phone-prefix">+62</span>
       <input
         type="tel"
-        placeholder="Phone Number"
+        placeholder="812-3456-7890"
         value={FormData[type].phone}
         onChange={(e) => handleInputChange(e, type, "phone")}
-        className="input-field"
+        className="input-field phone-input"
       />
+    </div>
+  </div>
+</div>
+
     </motion.div>
   );
 
@@ -245,113 +263,131 @@ function Form() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="form-section">
-        <h2 className="section-title">Select Status</h2>
-        <div className="dropdowns">
-          <select
-            value={status}
-            onChange={(e) => {
-              setStatus(e.target.value);
-              setSelectedProvince("");
-              setSelectedKabupaten("");
-              setKabupatenList([]);
-            }}
-            className="select-status small-select"
-          >
-            <option value="">-- Select --</option>
-            <option value="provincial">Provincial</option>
-            <option value="kabupaten">Kabupaten</option>
-          </select>
+    <div className="form-section">
+  <h2 className="section-title">Select Status</h2>
+  <div className="dropdowns">
+    {/* Status Dropdown */}
+    <div className="dropdown-group">
+      <label className="dropdown-label">Administrative Division</label>
+      <select
+        value={status}
+        onChange={(e) => {
+          setStatus(e.target.value);
+          setSelectedProvince("");
+          setSelectedKabupaten("");
+          setKabupatenList([]);
+        }}
+        className="select-status small-select"
+      >
+        <option value="">-- Select --</option>
+        <option value="provincial">Provincial</option>
+        <option value="kabupaten">Kabupaten</option>
+      </select>
+    </div>
 
-          {status && (
-            <select
-              value={selectedProvince}
-              onChange={handleProvinceChange}
-              className="select-status small-select"
-            >
-              <option value="">-- Select Province --</option>
-              {provinces.map((prov) => (
-                <option key={prov.adm_code} value={prov.LG}>
-                  {prov.LG}
-                </option>
-              ))}
-            </select>
-          )}
-
-          {status === "kabupaten" && (
-            <select
-              value={selectedKabupaten}
-              onChange={(e) => setSelectedKabupaten(e.target.value)}
-              className="select-status small-select"
-              disabled={!kabupatenList.length}
-            >
-              <option value="">-- Select Kabupaten --</option>
-              {kabupatenList.map((kab) => (
-                <option key={kab.adm_code} value={kab.LG}>
-                  {kab.LG}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-        {status && renderFormInputs(status)}
+    {/* Province Dropdown */}
+    {status && (
+      <div className="dropdown-group">
+        <label className="dropdown-label">Province</label>
+        <select
+          value={selectedProvince}
+          onChange={handleProvinceChange}
+          className="select-status small-select"
+        >
+          <option value="">-- Select Province --</option>
+          {provinces.map((prov) => (
+            <option key={prov.adm_code} value={prov.LG}>
+              {prov.LG}
+            </option>
+          ))}
+        </select>
       </div>
+    )}
+
+    {/* Kabupaten Dropdown */}
+    {status === "kabupaten" && (
+      <div className="dropdown-group">
+        <label className="dropdown-label">Kabupaten</label>
+        <select
+          value={selectedKabupaten}
+          onChange={(e) => setSelectedKabupaten(e.target.value)}
+          className="select-status small-select"
+          disabled={!kabupatenList.length}
+        >
+          <option value="">-- Select Kabupaten --</option>
+          {kabupatenList.map((kab) => (
+            <option key={kab.adm_code} value={kab.LG}>
+              {kab.LG}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+  </div>
+  {status && renderFormInputs(status)}
+</div>
 
       <div className="form-section">
         <h3 className="section-title">Upload Excel Files</h3>
+        
+
         <div className="file-upload-grid">
-          {[
-            "BridgeInventory",
-            "CODE_AN_Parameters",
-            "CODE_AN_UnitCostsPER",
-            "CODE_AN_UnitCostsPERUnpaved",
-            "CODE_AN_UnitCostsREH",
-            "CODE_AN_UnitCostsRIGID",
-            "CODE_AN_UnitCostsRM",
-            "CODE_AN_UnitCostsUPGUnpaved",
-            "CODE_AN_UnitCostsWidening",
-            "CODE_AN_WidthStandards",
-            "CulvertCondition",
-            "CulvertInventory",
-            "Link",
-            "RetainingWallInventory",
-            "RoadInventory",
-            "TrafficVolume",
-            "RoadCondition",
-          ].map((key, index) => (
-            <div key={key} className="file-upload-card">
-              <div className="file-content">
-                {!files[key] ? (
-                  <>
-                    <label className="file-label">
-                      <span className="upload-icon">+</span>
-                      <span className="file-title">{key}</span>
-                      <input
-                        type="file"
-                        accept=".xls,.xlsx"
-                        onChange={(e) => handleFileChange(e, key)}
-                        className="hidden-input"
-                      />
-                    </label>
-                    <p className="file-instruction">Click to upload</p>
-                  </>
-                ) : (
-                  <div className="file-preview">
-                    <div className="file-info">
-                      <span className="file-name">{files[key].name}</span>
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFile(key)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+  {[
+    "BridgeInventory",
+    "CODE_AN_Parameters",
+    "CODE_AN_UnitCostsPER",
+    "CODE_AN_UnitCostsPERUnpaved",
+    "CODE_AN_UnitCostsREH",
+    "CODE_AN_UnitCostsRIGID",
+    "CODE_AN_UnitCostsRM",
+    "CODE_AN_UnitCostsUPGUnpaved",
+    "CODE_AN_UnitCostsWidening",
+    "CODE_AN_WidthStandards",
+    "CulvertCondition",
+    "CulvertInventory",
+    "Link",
+    "RetainingWallInventory",
+    "RoadInventory",
+    "TrafficVolume",
+    "RoadCondition",
+  ].map((key) => (
+    <div key={key} className="file-upload-card">
+      <div className="file-content">
+        {!files[key] ? (
+          <label className="full-area-label">
+            <input
+              type="file"
+              accept=".xls,.xlsx"
+              onChange={(e) => handleFileChange(e, key)}
+              className="hidden-input"
+            />
+            <div className="upload-content">
+              <span className="upload-icon">+</span>
+              <span className="file-title">{key.split('_').join(' ')}</span>
+              <p className="file-instruction">Click to upload</p>
             </div>
-          ))}
-        </div>
+          </label>
+        ) : (
+          <div className="file-preview full-area-label">
+            <div className="file-info">
+              <span className="file-name">{files[key].name}</span>
+              <button
+                className="remove-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeFile(key);
+                }}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
         <button onClick={handleSubmit} className="button-submit">
           Generate Report
         </button>
